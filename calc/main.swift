@@ -33,8 +33,8 @@ class Stack {
     }
     
     // get the value of the item at the top of the stack
-    func top() -> String? {
-        if self.stack.last != nil {
+            func top() -> String? {
+                if self.stack.last != nil {
             let lastItem = self.stack.last
             return lastItem!
         } else {
@@ -92,21 +92,21 @@ class InfixConverter {
     // negative and multi-digit numbers
     
     func convertInfixToPostfix(infix: String) -> String {
-        var postfix = String()
+        var postfixString = String()
         let stack = Stack()
         let validator = Validator()
         
         // Iterate through every token in the expression, append the operands to the postfix expression, push the operators into the stack
         for token in infix {
             if validator.isStringNum(num: String(token)) || validator.isStringNegSymbol(op: String(token)) {
-                postfix.append(String(token))
+                postfixString.append(String(token))
             } else if token == " " {
                 continue
             } else {
                 // pop operators from the stack based on precedence and append them to the postfix expression
-                postfix += " "
+                postfixString += " "
                 while stack.empty() == false && (precedence[stack.top()!]! >= precedence[String(token)]!) {
-                    postfix.append(stack.pop()!)
+                    postfixString.append(stack.pop()!)
                 }
                 stack.push(input: String(token))
             }
@@ -114,10 +114,10 @@ class InfixConverter {
         
         // empty out the stack by appending the rest of the values onto the postfix expression string
         while stack.empty() == false {
-            postfix.append(stack.pop()!)
+            postfixString.append(stack.pop()!)
         }
         
-        return " " + postfix
+        return " " + postfixString
     }
     
     // this function is used to separate the tokens present in the postfix expression
@@ -206,8 +206,8 @@ class PostfixProcessor {
         let maths = Maths()
         result = Int()
         let validator = Validator()
-        var op1 = Int()
-        var op2 = Int()
+        var operand1 = Int()
+        var operand2 = Int()
     
         for string in postfixString {
             
@@ -215,9 +215,9 @@ class PostfixProcessor {
                 stack.push(input: string)
             } else if validator.isStringOp(op: string) && stack.empty() == false{
                 if stack.size() > 1 {
-                    op2 = Int(stack.pop()!)!
-                    op1 = Int(stack.pop()!)!
-                    result = maths.calculate(op: string, number1: op1, number2: op2)
+                    operand2 = Int(stack.pop()!)!
+                    operand1 = Int(stack.pop()!)!
+                    result = maths.calculate(op: string, number1: operand1, number2: operand2)
                     stack.push(input: String(result))
                 }
             }
@@ -324,6 +324,5 @@ let convertedResult = converted.convertInfixToPostfix(infix: expression)
 let processor = PostfixProcessor(postfixString: converted.getPostfixTokens(postfix: convertedResult))
 // display the result
 print(processor.getResult())
-
 
 
